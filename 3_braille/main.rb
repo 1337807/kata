@@ -10,6 +10,10 @@ class BrailleTranslator
     'z'=>'O..OOO'
   }
 
+  def translate_from_english_character(english)
+    ENGLISH[english]
+  end
+
   def translate_from_braille_character(braille)
     ENGLISH.invert[braille]
   end
@@ -21,8 +25,12 @@ class BrailleTranslatorTest < Test::Unit::TestCase
   end
 
   def test_translate_from_braille_character
-    braille = '.OOO..'
-    result = @translator.translate_from_braille_character(braille)
+    result = @translator.translate_from_braille_character('.OOO..')
     assert_equal 'j', result
+  end
+
+  def test_translate_from_english_character
+    result = @translator.translate_from_english_character('o')
+    assert_equal 'O..OO.', result
   end
 end
