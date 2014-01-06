@@ -24,6 +24,33 @@ class PhoneWordTranslator
   end
 end
 
+class WordFinder
+  attr_accessor :word_list
+
+  def initialize
+    @word_list = []
+  end
+
+  def find(phone_word)
+    self.word_list.map do |word|
+      match = word.match(/^#{phone_word}.*/)
+      match.to_s if match
+    end.compact
+  end
+end
+
+class WordFinderTest < Test::Unit::TestCase
+  def setup
+    @finder = WordFinder.new
+  end
+
+  def test_find
+    @finder.word_list = ['rad', 'radical', 'dudical']
+    result = @finder.find('rad')
+    assert_equal ['rad', 'radical'], result
+  end
+end
+
 class PhoneWordTranslatorTest < Test::Unit::TestCase
   def setup
     @translator = PhoneWordTranslator.new
