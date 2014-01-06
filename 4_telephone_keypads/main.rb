@@ -28,7 +28,7 @@ class WordFinder
   attr_accessor :word_list
 
   def initialize
-    @word_list = []
+    @word_list =  File.read('dictionary.txt').split
   end
 
   def find(phone_word)
