@@ -1,0 +1,64 @@
+http://www.reddit.com/r/dailyprogrammer/comments/1q18a5/110613_challenge_134_intermediate_coin/
+
+(Intermediate): Coin Denomination
+Many different currencies around the world have different sets of valued coins.
+The United State's currency has 1-cent (e.g. $0.01), 5-cent, 10-cent, 25-cent,
+50-cent, and 1-dollar coins. The European Union's currency has its own set of
+coin values: 1-cent, 2-cent, 5-cent, 10-cent, 20-cent, 50-cent, 1-euro, and
+2-euro coins. You can immediately see that these two different currencies have
+different sets of coin denominations.
+
+Your goal is to write a program that takes definitions of these currency
+denominations and a cent-value you want to reach. Your program should then print
+all possible combinations of coins, in each denomination, that sums to the given
+value. For example, if you want to get 120-cents in United States currency, you
+could do so with a dollar-coin and two 10-cent pieces. To do so with European
+Union currency, you could use six 20-cent pieces. There are many other possible
+solutions to the 120-cent value!
+
+Formal Inputs & Outputs
+Input Description
+On standard console input, you will be given two space-delimited integers N and M,
+where N is the number of currency denomination definitions, and M is the currency
+value you want to reach in cents. N will range inclusively between 1 and 8, while
+M will range inclusively between 1 and 500. After this first line of input, you
+will be given N-lines of plain text in the form of space-delimited integers.
+These integers represent the currency denomination values, e.g. the values of
+each coin type. No values will repeat, though different currencies may have only
+slightly different denominations.
+
+Output Description
+For each N (currency denomination definition), you must print all possible
+combinations of coins that sums to the exact value of M on separate lines. 
+These lines should be a space-delimited list of the form "<denomination amount>:<coin amount>".
+At the beginning of each set of currencies, you must print the string
+"Currency X Combinations:", where X is the currency the set was related to (starting
+from index 1). This list can be very long, but you must order each line from the
+lowest-denomination coin to the highest-denomination coin. Row-ordering does not matter.
+
+Two examples of valid United States coin combinations that sum to 100-cents are as follows:
+1:10 5:3 25:3
+25:4
+The first line means that you are summing 10 1-cent coins, 3 5-cent coins, and
+3 25-cent coins, giving a total of 100-cents (1x10 + 5x3 + 25x3). The second
+line is a simple sum of four quarters: 4 coins x 25-cents each, summing to
+100-cents. Note that you do not have to print out any coins you do not use.
+
+Sample Inputs & Outputs
+Sample Input
+2 8
+1 5 10 25 50 100
+1 2 5 10 20 50 100 200
+
+Sample Output
+Currency 1 Combinations:
+1:8
+1:3 5:1
+Currency 2 Combinations:
+1:8
+1:6 2:1
+1:4 2:2
+1:2 2:3
+2:4
+1:3 5:1
+1:1 2:1 5:1
