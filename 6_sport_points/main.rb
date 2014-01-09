@@ -22,4 +22,12 @@ class ScoreValidatorTest < Test::Unit::TestCase
       assert result
     end
   end
+
+  def test_score_is_divisible_by_number_in_set_returns_false_for_invalid_score
+    [3, 7, 11, 17].each do |score|
+      set = [2, 5, 9]
+      result = @validator.score_is_divisible_by_number_in_set?(score, set)
+      refute result
+    end
+  end
 end
