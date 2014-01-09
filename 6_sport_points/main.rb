@@ -13,6 +13,10 @@ class ScoreValidator
 
   def score_is_valid?(score)
     return true if score_is_divisible_by_number_in_set?(score, point_types.keys)
+
+    point_types.keys.each do |point_type|
+      return true if score_is_valid?(score - point_type)
+    end
   end
 end
 
@@ -46,6 +50,12 @@ class ScoreValidatorTest < Test::Unit::TestCase
   def test_score_is_valid_returns_true_for_extra_point
     @validator.point_types = { 3 => 'field goal' }
     result = @validator.score_is_valid?(3)
+    assert result
+  end
+
+  def test_score_is_valid_returns_true_for_touchdown_with_point_and_field_goal
+    @validator.point_types = { 3 => 'field goal', 7 => 'touchdown' }
+    result = @validator.score_is_valid?(10)
     assert result
   end
 end
