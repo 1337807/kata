@@ -58,4 +58,10 @@ class ScoreValidatorTest < Test::Unit::TestCase
     result = @validator.score_is_valid?(10)
     assert result
   end
+
+  def test_score_is_valid_returns_true_for_two_touchdowns_with_points_and_field_goal
+    @validator.point_types = { 3 => 'field goal', 7 => 'touchdown' }
+    result = @validator.score_is_valid?(17)
+    assert result
+  end
 end
