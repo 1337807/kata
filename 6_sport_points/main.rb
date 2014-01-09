@@ -54,14 +54,20 @@ class ScoreValidatorTest < Test::Unit::TestCase
   end
 
   def test_score_is_valid_returns_true_for_touchdown_with_point_and_field_goal
-    @validator.point_types = { 3 => 'field goal', 7 => 'touchdown' }
+    @validator.point_types = { 3 => 'field goal', 7 => 'touchdown with extra point' }
     result = @validator.score_is_valid?(10)
     assert result
   end
 
   def test_score_is_valid_returns_true_for_two_touchdowns_with_points_and_field_goal
-    @validator.point_types = { 3 => 'field goal', 7 => 'touchdown' }
+    @validator.point_types = { 3 => 'field goal', 7 => 'touchdown with extra point' }
     result = @validator.score_is_valid?(17)
+    assert result
+  end
+
+  def test_score_is_valid_for_five_touchdowns_with_conversions_and_field_goal
+    @validator.point_types = { 3 => 'field goal', 8 => 'touchdown with conversion' }
+    result = @validator.score_is_valid?(43)
     assert result
   end
 end
