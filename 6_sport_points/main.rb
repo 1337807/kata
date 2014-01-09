@@ -23,6 +23,12 @@ end
 class ScoreValidatorTest < Test::Unit::TestCase
   def setup
     @validator = ScoreValidator.new
+    @validator.point_types = {
+      6 => 'touchdown',
+      7 => 'touchdown with extra point',
+      8 => 'touchdown with conversion',
+      3 => 'field goal'
+    }
   end
 
   def test_score_is_divisible_by_number_in_set?
@@ -69,5 +75,10 @@ class ScoreValidatorTest < Test::Unit::TestCase
     @validator.point_types = { 3 => 'field goal', 8 => 'touchdown with conversion' }
     result = @validator.score_is_valid?(43)
     assert result
+  end
+
+  def test_four_is_invalid_score
+    result = @validator.score_is_valid?(4)
+    refute result
   end
 end
