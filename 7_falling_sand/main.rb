@@ -57,10 +57,14 @@ class Sandscape
 
   def drop_sand
     (self.grid.length - 1).times do
-      self.grid.each_with_index do |row, y|
-        row.each_with_index do |block, x|
-          drop_block(x, y) if is_sand?(block)
-        end
+      drop_sand_once
+    end
+  end
+
+  def drop_sand_once
+    self.grid.each_with_index do |row, y|
+      row.each_with_index do |block, x|
+        drop_block(x, y) if is_sand?(block)
       end
     end
   end
@@ -118,6 +122,22 @@ class SandscapeTest < Test::Unit::TestCase
     expected =        [ ['%', ' '],
                         ['#', ' '] ]
     @sandscape.drop_block(0, 0)
+
+    assert_equal expected, @sandscape.grid
+  end
+
+  def test_drop_sand_once_moves_unblocked_sand_down_until_it_hits_stone
+    @sandscape.grid = [ ['.', '#', '.', ' ', '.'],
+                        [' ', '.', '.', '.', ' '],
+                        [' ', ' ', ' ', ' ', '.'],
+                        [' ', ' ', ' ', ' ', ' '],
+                        [' ', '#', ' ', '#', '#'] ]
+    expected =        [ [' ', '#', '.', ' ', ' '],
+                        [' ', ' ', ' ', ' ', '.'],
+                        [' ', ' ', ' ', ' ', ' '],
+                        [' ', '.', ' ', '.', '.'],
+                        ['.', '#', '.', '#', '#'] ]
+    @sandscape.drop_sand_once
 
     assert_equal expected, @sandscape.grid
   end
