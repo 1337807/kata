@@ -9,12 +9,13 @@ class Sandscape
     ' ' => 'empty'
   }
 
-  def initialize
+  def initialize(size = nil)
     @grid = [[]]
+    generate(size) if size
   end
 
   def is_sand?(block)
-    block == '.'
+    block == BLOCK_TYPES.invert['sand']
   end
 
   def block_type(block)
@@ -59,6 +60,8 @@ class Sandscape
     (self.grid.length - 1).times do
       drop_sand_once
     end
+
+    draw
   end
 
   def drop_sand_once
@@ -67,6 +70,10 @@ class Sandscape
         drop_block(x, y) if is_sand?(block)
       end
     end
+  end
+
+  def draw
+    puts self.grid.map { |r| r.join }.join("\n")
   end
 end
 
