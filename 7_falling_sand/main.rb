@@ -35,6 +35,12 @@ class Sandscape
     self.grid[x][y]
   end
 
+  def drop_block(x, y)
+    block = get_block(x, y)
+    set_block(' ', x, y)
+    set_block(block, x + 1, y)
+  end
+
   def set_block(block, x, y)
     self.grid[x][y] = block
   end
@@ -72,7 +78,17 @@ class SandscapeTest < Test::Unit::TestCase
   end
 
   def test_set_block
-    @sandscape.set_block('$', 0, 0)
-    assert_equal [['$']], @sandscape.grid
+    @sandscape.set_block('^', 0, 0)
+    assert_equal [['^']], @sandscape.grid
+  end
+
+  def test_drop_block_moves_the_block_down_one_row
+    @sandscape.grid = [ ['%', ' '],
+                        [' ', ' '] ]
+    expected =        [ [' ', ' '],
+                        ['%', ' '] ]
+    @sandscape.drop_block(0, 0)
+
+    assert_equal expected, @sandscape.grid
   end
 end
