@@ -36,9 +36,13 @@ class Sandscape
   end
 
   def drop_block(x, y)
-    block = get_block(x, y)
-    set_block(' ', x, y)
-    set_block(block, x, y + 1)
+    block_below = get_block(x, y + 1)
+
+    if block_type(block_below) == 'empty'
+      block = get_block(x, y)
+      set_block(' ', x, y)
+      set_block(block, x, y + 1)
+    end
   end
 
   def set_block(block, x, y)
@@ -87,6 +91,16 @@ class SandscapeTest < Test::Unit::TestCase
                         [' ', ' '] ]
     expected =        [ [' ', ' '],
                         ['%', ' '] ]
+    @sandscape.drop_block(0, 0)
+
+    assert_equal expected, @sandscape.grid
+  end
+
+  def test_drop_block_does_not_drop_blocks_to_occupied_positions
+    @sandscape.grid = [ ['%', ' '],
+                        ['#', ' '] ]
+    expected =        [ ['%', ' '],
+                        ['#', ' '] ]
     @sandscape.drop_block(0, 0)
 
     assert_equal expected, @sandscape.grid
