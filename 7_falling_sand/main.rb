@@ -1,11 +1,17 @@
 require 'test/unit'
 
 class Sandscape
+  attr_accessor :grid
+
   BLOCK_TYPES = {
     '.' => 'sand',
     '#' => 'stone',
     ' ' => 'empty'
   }
+
+  def initialize
+    @grid = [[]]
+  end
 
   def is_sand?(block)
     block == '.'
@@ -17,6 +23,12 @@ class Sandscape
 
   def random_block
     BLOCK_TYPES.keys.sample
+  end
+
+  def generate(size)
+    self.grid = Array.new(size) do
+      Array.new(size) { random_block }
+    end
   end
 end
 
@@ -39,5 +51,10 @@ class SandscapeTest < Test::Unit::TestCase
 
   def test_random_block
     assert Sandscape::BLOCK_TYPES.keys.include? @sandscape.random_block
+  end
+
+  def test_generate_builds_grids_to_given_dimensions
+    @sandscape.generate(5)
+    assert_equal [5, 5], [@sandscape.grid.length, @sandscape.grid.first.length]
   end
 end
