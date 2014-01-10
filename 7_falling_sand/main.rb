@@ -14,6 +14,10 @@ class Sandscape
   def block_type(block)
     BLOCK_TYPES[block]
   end
+
+  def random_block
+    BLOCK_TYPES.keys.sample
+  end
 end
 
 class SandscapeTest < Test::Unit::TestCase
@@ -31,5 +35,9 @@ class SandscapeTest < Test::Unit::TestCase
 
   def test_block_type
     assert_equal 'stone', @sandscape.block_type('#')
+  end
+
+  def test_random_block
+    assert Sandscape::BLOCK_TYPES.keys.include? @sandscape.random_block
   end
 end
