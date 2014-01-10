@@ -34,6 +34,10 @@ class Sandscape
   def get_block(x, y)
     self.grid[x][y]
   end
+
+  def set_block(block, x, y)
+    self.grid[x][y] = block
+  end
 end
 
 class SandscapeTest < Test::Unit::TestCase
@@ -65,5 +69,10 @@ class SandscapeTest < Test::Unit::TestCase
   def test_get_block_returns_the_block_at_the_given_dimensions
     @sandscape.grid = [['#']]
     assert_equal '#', @sandscape.get_block(0, 0)
+  end
+
+  def test_set_block
+    @sandscape.set_block('$', 0, 0)
+    assert_equal [['$']], @sandscape.grid
   end
 end
