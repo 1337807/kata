@@ -32,17 +32,17 @@ class Sandscape
   end
 
   def get_block(x, y)
-    self.grid[x][y]
+    self.grid[y][x]
   end
 
   def drop_block(x, y)
     block = get_block(x, y)
     set_block(' ', x, y)
-    set_block(block, x + 1, y)
+    set_block(block, x, y + 1)
   end
 
   def set_block(block, x, y)
-    self.grid[x][y] = block
+    self.grid[y][x] = block
   end
 end
 
