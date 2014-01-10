@@ -30,6 +30,10 @@ class Sandscape
       Array.new(size) { random_block }
     end
   end
+
+  def get_block(x, y)
+    self.grid[x][y]
+  end
 end
 
 class SandscapeTest < Test::Unit::TestCase
@@ -56,5 +60,10 @@ class SandscapeTest < Test::Unit::TestCase
   def test_generate_builds_grids_to_given_dimensions
     @sandscape.generate(5)
     assert_equal [5, 5], [@sandscape.grid.length, @sandscape.grid.first.length]
+  end
+
+  def test_get_block_returns_the_block_at_the_given_dimensions
+    @sandscape.grid = [['#']]
+    assert_equal '#', @sandscape.get_block(0, 0)
   end
 end
