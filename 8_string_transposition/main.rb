@@ -28,6 +28,12 @@ class Transposer
       insert(word)
     end
   end
+
+  def show_grid
+    @word_grid.each do |row|
+      puts row.join
+    end
+  end
 end
 
 class TransposerTest < Test::Unit::TestCase
@@ -72,5 +78,19 @@ class TransposerTest < Test::Unit::TestCase
       [" ", "r"]
     ]
     assert_equal expected, @transposer.word_grid
+  end
+
+  def test_show_grid_prints_each_row_as_a_string
+    short_word = 'Jonan'
+    long_word = 'Scheffler'
+    @transposer.insert short_word
+    @transposer.insert long_word
+
+    rows = []
+    @transposer.singleton_class.send(:define_method, :puts, Proc.new { |row| rows << row })
+    @transposer.show_grid
+    expected = ['JS', 'oc', 'nh', 'ae', 'nf', ' f', ' l', ' e', ' r']
+
+    assert_equal expected, rows
   end
 end
