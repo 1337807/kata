@@ -22,6 +22,12 @@ class Transposer
       end
     end
   end
+
+  def transpose(sentence)
+    sentence.split("\n").each do |word|
+      insert(word)
+    end
+  end
 end
 
 class TransposerTest < Test::Unit::TestCase
@@ -50,5 +56,21 @@ class TransposerTest < Test::Unit::TestCase
     @transposer.insert long_word
     result = @transposer.word_grid[5..8].map { |row| row[0] }.join
     assert_equal '    ', result
+  end
+
+  def test_transpose_inserts_all_words_into_the_word_grid
+    @transposer.transpose("Jonan\nScheffler")
+    expected = [
+      ["J", "S"],
+      ["o", "c"],
+      ["n", "h"],
+      ["a", "e"],
+      ["n", "f"],
+      [" ", "f"],
+      [" ", "l"],
+      [" ", "e"],
+      [" ", "r"]
+    ]
+    assert_equal expected, @transposer.word_grid
   end
 end
