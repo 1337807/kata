@@ -8,8 +8,12 @@ class Transposer
   end
 
   def insert(word)
-    word.split(//).each do |letter|
-      self.word_grid << [letter]
+    word.split(//).each_with_index do |letter, index|
+      if self.word_grid[index]
+        self.word_grid[index] << letter
+      else
+        self.word_grid << [letter]
+      end
     end
   end
 end
@@ -23,5 +27,13 @@ class TransposerTest < Test::Unit::TestCase
     word = 'Jonan'
     @transposer.insert word
     assert_equal word.length, @transposer.word_grid.length
+  end
+
+  def test_transposer_expands_to_the_length_of_the_longest_word
+    short_word = 'Jonan'
+    long_word = 'Scheffler'
+    @transposer.insert short_word
+    @transposer.insert long_word
+    assert_equal long_word.length, @transposer.word_grid.length
   end
 end
