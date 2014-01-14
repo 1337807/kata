@@ -3,15 +3,28 @@ require 'test/unit'
 class Lock
   attr_accessor :size, :digits, :clicks
 
-  def initialize(size = nil)
-    @size = nil
+  def initialize(size = 10)
+    @size = size
     @digits = []
     @clicks = 0
   end
 
   def enter_digit(digit)
-    self.clicks += self.size * 2 + digit if self.digits.empty?
+    if self.digits.empty?
+      self.clicks += first_digit_clicks(digit)
+    elsif self.digits.length == 1
+      self.clicks += second_digit_clicks(digit)
+    end
+
     self.digits << digit
+  end
+
+  def first_digit_clicks(digit)
+    self.size * 2 + digit
+  end
+
+  def second_digit_clicks(digit)
+    self.size + self.digits.first + self.size - digit
   end
 end
 
@@ -20,10 +33,19 @@ class LockTest < Test::Unit::TestCase
     @lock = Lock.new
   end
 
-  def test_entering_the_first_digit_increases_the_clicks_by_twice_the_size
+  def test_first_digit_increases_clicks_by_twice_size_plus_digit
     @lock.size = 7
     digit = 5
     expected_increase = 2 * @lock.size + digit
+    @lock.enter_digit(digit)
+    assert_equal expected_increase, @lock.clicks
+  end
+
+  def test_second_digit_increases_clicks_by_size_and_first_digit_and_size_less_second_digit
+    @lock.size = 12
+    @lock.enter_digit(5)
+    digit = 7
+    expected_increase = @lock.size + @lock.digits.first + @lock.size - digit + @lock.clicks
     @lock.enter_digit(digit)
     assert_equal expected_increase, @lock.clicks
   end
