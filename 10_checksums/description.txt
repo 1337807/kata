@@ -1,9 +1,12 @@
+http://www.reddit.com/r/dailyprogrammer/comments/1qwkdz/111113_challenge_141_easy_checksums/
+
 (Easy): Checksums
 Checksums are a tool that allow you to verify the integrity of data (useful for
 networking, security, error-correction, etc.). Though there are many different
 Checksum algorithms, the general usage is that you give raw-data to your
 algorithm of choice, and a block of data (usually smaller than the given data)
-is generated and can later be used by re-computing the checksum and comparing the original and recent values.
+is generated and can later be used by re-computing the checksum and comparing the
+original and recent values.
 A classic example for how helpful Checksums are is with data-networking: imagine
 you have a packet of information that must be guaranteed the same after receiving
 it. Before sending the data, you can compute its checksum, and send both blocks
@@ -28,7 +31,8 @@ text. This text will only contain regular printable characters, and will all
 be on a single line of input.
 
 Output Description
-For each line of input, print the index (starting from 1) and the 16-bit Fletcher's checksum as a 4-digit hexadecimal number.
+For each line of input, print the index (starting from 1) and the 16-bit
+Fletcher's checksum as a 4-digit hexadecimal number.
 
 Sample Inputs & Outputs
 Sample Input
