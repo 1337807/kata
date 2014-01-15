@@ -2,7 +2,7 @@ require 'test/unit'
 
 class Checksum
   def binary(word)
-    "Jonan".bytes.map { |letter| letter.to_s(2) }.join
+    word.bytes.map { |letter| letter.to_s(2) }.join
   end
 
   def binary_blocks(word)
