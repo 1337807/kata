@@ -1,5 +1,17 @@
 require 'test/unit'
 
+class Game
+  attr_accessor :doors
+
+  def initialize
+    @doors = []
+  end
+
+  def start(door_count = 3)
+    self.doors = Array.new(door_count) { Door.new }
+  end
+end
+
 class Door
   attr_accessor :state, :contents
 
@@ -50,5 +62,16 @@ class DoorTest < Test::Unit::TestCase
   def test_doors_that_hold_cars_know_it
     @door.contents = :car
     assert @door.car?
+  end
+end
+
+class GameTest < Test::Unit::TestCase
+  def setup
+    @game = Game.new
+  end
+
+  def test_started_game_has_three_doors_by_default
+    @game.start
+    assert_equal 3, @game.doors.length
   end
 end
