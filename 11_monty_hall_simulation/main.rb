@@ -1,14 +1,22 @@
 require 'test/unit'
 
 class Door
-  attr_accessor :open
+  attr_accessor :state
 
   def initialize
-    @open = false
+    @state = :closed
   end
 
   def closed?
-    !self.open
+    self.state == :closed
+  end
+
+  def open
+    self.state = :open
+  end
+
+  def open?
+    self.state == :open
   end
 end
 
@@ -19,5 +27,10 @@ class DoorTest < Test::Unit::TestCase
 
   def test_door_starts_closed
     assert @door.closed?
+  end
+
+  def test_door_can_be_opened
+    @door.open
+    assert @door.open?
   end
 end
