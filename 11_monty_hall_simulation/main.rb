@@ -8,14 +8,16 @@ class Game
   end
 
   def start(door_count = 3)
-    self.doors = Array.new(door_count) { Door.new }
+    self.doors = Array.new(door_count) { Door.new(:donkey) }
+    self.doors.sample.contents = :car
   end
 end
 
 class Door
   attr_accessor :state, :contents
 
-  def initialize
+  def initialize(contents = nil)
+    @contents = contents
     @state = :closed
   end
 
@@ -73,5 +75,11 @@ class GameTest < Test::Unit::TestCase
   def test_started_game_has_three_doors_by_default
     @game.start
     assert_equal 3, @game.doors.length
+  end
+
+  def test_games_only_have_one_door_with_a_car
+    @game.start
+    doors_with_cars = @game.doors.keep_if(&:car?)
+    assert_equal 1, doors_with_cars.length
   end
 end
