@@ -22,6 +22,10 @@ class Door
   def donkey?
     self.contents == :donkey
   end
+
+  def car?
+    self.contents == :car
+  end
 end
 
 class DoorTest < Test::Unit::TestCase
@@ -41,5 +45,10 @@ class DoorTest < Test::Unit::TestCase
   def test_doors_that_hold_donkeys_know_it
     @door.contents = :donkey
     assert @door.donkey?
+  end
+
+  def test_doors_that_hold_cars_know_it
+    @door.contents = :car
+    assert @door.car?
   end
 end
