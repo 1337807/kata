@@ -134,6 +134,13 @@ class Simulation
       self.two_pick_results << chosen_door.car?
     end
   end
+
+  def one_pick_percentage_correct
+    100 * (self.one_pick_results.count(true) / self.one_pick_results.length.to_f)
+  end
+
+  def two_pick_percentage_correct
+  end
 end
 
 class SimulationTest < Test::Unit::TestCase
@@ -141,19 +148,24 @@ class SimulationTest < Test::Unit::TestCase
     @simulation = Simulation.new
   end
 
-  def test_simulations_collect_one_pick_results_for_the_default_number_of_games
+  def test_collect_one_pick_results_collects_the_default_number_of_game_results
     @simulation.gather_one_pick_results
     assert_equal 10, @simulation.one_pick_results.length
   end
 
-  def test_simulations_collect_two_pick_results_for_the_default_number_of_games
+  def test_collect_two_pick_results_collects_the_default_number_of_game_results
     @simulation.gather_two_pick_results
     assert_equal 10, @simulation.two_pick_results.length
   end
 
-  def test_running_simulations_collects_both_sets_of_results
+  def test_running_collects_both_sets_of_game_results
     @simulation.gather_one_pick_results
     @simulation.gather_two_pick_results
     assert_equal 20, (@simulation.one_pick_results + @simulation.two_pick_results).length
+  end
+
+  def test_one_pick_percentage_correct_returns_the_correct_ratio
+    @simulation.one_pick_results = [true, false]
+    assert_equal 50, @simulation.one_pick_percentage_correct
   end
 end
