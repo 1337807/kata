@@ -140,6 +140,7 @@ class Simulation
   end
 
   def two_pick_percentage_correct
+    100 * (self.two_pick_results.count(true) / self.two_pick_results.length.to_f)
   end
 end
 
