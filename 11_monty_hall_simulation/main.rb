@@ -64,6 +64,7 @@ class Game
   def start(door_count = 3)
     self.doors = Array.new(door_count) { Door.new(:donkey) }
     self.doors.sample.contents = :car
+    self
   end
 
   def random_closed_door
@@ -103,5 +104,33 @@ class GameTest < Test::Unit::TestCase
 
   def test_open_random_donkey_door_only_opens_goat_doors
     assert @game.random_donkey_door.donkey?
+  end
+end
+
+class Simulation
+  attr_accessor :game_count, :one_pick_results
+
+  def initialize(game_count = 10)
+    @one_pick_results = []
+    @game_count = game_count
+  end
+
+  def run
+    self.game_count.times do
+      game = Game.new.start
+      chosen_door = game.random_closed_door
+      self.one_pick_results << chosen_door.car?
+    end
+  end
+end
+
+class SimulationTest < Test::Unit::TestCase
+  def setup
+    @simulation = Simulation.new
+  end
+
+  def test_simulations_collect_one_pick_results_for_the_default_number_of_games
+    @simulation.run
+    assert = @simulation.one_pick_results.length == 10
   end
 end
