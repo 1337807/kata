@@ -67,39 +67,41 @@ class Game
   end
 
   def random_closed_door
-    closed_doors = @doors.keep_if { |door| door.closed? }
-    closed_doors.sample
+    closed_door = self.doors.keep_if { |door| door.closed? }.sample
+    self.doors.delete(closed_door)
   end
 
   def random_donkey_door
-    donkey_doors = @doors.keep_if { |door| door.donkey? }
-    donkey_doors.sample
+    donkey_door = self.doors.keep_if { |door| door.donkey? }.sample
+    self.doors.delete(donkey_door)
   end
 end
 
 class GameTest < Test::Unit::TestCase
   def setup
     @game = Game.new
+    @game.start
   end
 
   def test_started_game_has_three_doors_by_default
-    @game.start
     assert_equal 3, @game.doors.length
   end
 
   def test_games_only_have_one_door_with_a_car
-    @game.start
     doors_with_cars = @game.doors.keep_if(&:car?)
     assert_equal 1, doors_with_cars.length
   end
 
   def test_random_closed_door_selects_only_closed_doors
-    @game.start
     assert @game.random_closed_door.closed?
   end
 
+  def test_random_closed_door_decreases_the_available_door_count_by_one
+    @game.random_closed_door
+    assert_equal 2, @game.doors.length
+  end
+
   def test_open_random_donkey_door_only_opens_goat_doors
-    @game.start
     assert @game.random_donkey_door.donkey?
   end
 end
