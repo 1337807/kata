@@ -70,6 +70,11 @@ class Game
     closed_doors = @doors.keep_if { |door| door.closed? }
     closed_doors.sample
   end
+
+  def random_donkey_door
+    donkey_doors = @doors.keep_if { |door| door.donkey? }
+    donkey_doors.sample
+  end
 end
 
 class GameTest < Test::Unit::TestCase
@@ -91,5 +96,10 @@ class GameTest < Test::Unit::TestCase
   def test_random_closed_door_selects_only_closed_doors
     @game.start
     assert @game.random_closed_door.closed?
+  end
+
+  def test_open_random_donkey_door_only_opens_goat_doors
+    @game.start
+    assert @game.random_donkey_door.donkey?
   end
 end
