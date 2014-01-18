@@ -150,4 +150,10 @@ class SimulationTest < Test::Unit::TestCase
     @simulation.gather_two_pick_results
     assert_equal 10, @simulation.two_pick_results.length
   end
+
+  def test_running_simulations_collects_both_sets_of_results
+    @simulation.gather_one_pick_results
+    @simulation.gather_two_pick_results
+    assert_equal 20, (@simulation.one_pick_results + @simulation.two_pick_results).length
+  end
 end
