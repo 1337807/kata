@@ -108,18 +108,30 @@ class GameTest < Test::Unit::TestCase
 end
 
 class Simulation
-  attr_accessor :game_count, :one_pick_results
+  attr_accessor :game_count, :one_pick_results, :two_pick_results
 
   def initialize(game_count = 10)
     @one_pick_results = []
+    @two_pick_results = []
     @game_count = game_count
   end
 
   def run
+  end
+
+  def gather_one_pick_results
     self.game_count.times do
       game = Game.new.start
       chosen_door = game.random_closed_door
       self.one_pick_results << chosen_door.car?
+    end
+  end
+
+  def gather_two_pick_results
+    self.game_count.times do
+      game = Game.new.start
+      chosen_door = game.random_closed_door
+      self.two_pick_results << chosen_door.car?
     end
   end
 end
@@ -130,7 +142,12 @@ class SimulationTest < Test::Unit::TestCase
   end
 
   def test_simulations_collect_one_pick_results_for_the_default_number_of_games
-    @simulation.run
-    assert = @simulation.one_pick_results.length == 10
+    @simulation.gather_one_pick_results
+    assert_equal 10, @simulation.one_pick_results.length
+  end
+
+  def test_simulations_collect_two_pick_results_for_the_default_number_of_games
+    @simulation.gather_two_pick_results
+    assert_equal 10, @simulation.two_pick_results.length
   end
 end
