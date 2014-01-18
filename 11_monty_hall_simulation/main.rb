@@ -1,18 +1,5 @@
 require 'test/unit'
 
-class Game
-  attr_accessor :doors
-
-  def initialize
-    @doors = []
-  end
-
-  def start(door_count = 3)
-    self.doors = Array.new(door_count) { Door.new(:donkey) }
-    self.doors.sample.contents = :car
-  end
-end
-
 class Door
   attr_accessor :state, :contents
 
@@ -67,6 +54,24 @@ class DoorTest < Test::Unit::TestCase
   end
 end
 
+class Game
+  attr_accessor :doors
+
+  def initialize
+    @doors = []
+  end
+
+  def start(door_count = 3)
+    self.doors = Array.new(door_count) { Door.new(:donkey) }
+    self.doors.sample.contents = :car
+  end
+
+  def random_closed_door
+    closed_doors = @doors.keep_if { |door| door.closed? }
+    closed_doors.sample
+  end
+end
+
 class GameTest < Test::Unit::TestCase
   def setup
     @game = Game.new
@@ -81,5 +86,10 @@ class GameTest < Test::Unit::TestCase
     @game.start
     doors_with_cars = @game.doors.keep_if(&:car?)
     assert_equal 1, doors_with_cars.length
+  end
+
+  def test_random_closed_door_selects_only_closed_doors
+    @game.start
+    assert @game.random_closed_door.closed?
   end
 end
