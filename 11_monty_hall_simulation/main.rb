@@ -108,9 +108,12 @@ class GameTest < Test::Unit::TestCase
 end
 
 class Simulation
-  attr_accessor :game_count, :one_pick_results, :two_pick_results
+  attr_accessor :game_count, :one_pick_results, :two_pick_results,
+                :one_pick_games, :two_pick_games
 
   def initialize(game_count = 10)
+    @one_pick_games = []
+    @two_pick_games = []
     @one_pick_results = []
     @two_pick_results = []
     @game_count = game_count
@@ -122,6 +125,7 @@ class Simulation
   def gather_one_pick_results
     self.game_count.times do
       game = Game.new.start
+      self.one_pick_games << game
       chosen_door = game.random_closed_door
       self.one_pick_results << chosen_door.car?
     end
@@ -130,6 +134,9 @@ class Simulation
   def gather_two_pick_results
     self.game_count.times do
       game = Game.new.start
+      self.two_pick_games << game
+      chosen_door = game.random_closed_door
+      game.random_donkey_door.open
       chosen_door = game.random_closed_door
       self.two_pick_results << chosen_door.car?
     end
@@ -159,10 +166,15 @@ class SimulationTest < Test::Unit::TestCase
     assert_equal 10, @simulation.two_pick_results.length
   end
 
+  def test_collect_two_pick_results_chooses_two_random_closed_doors
+    @simulation.gather_two_pick_results
+    assert_equal 20, @simulation.two_pick_games.map(&:doors).flatten.length
+  end
+
   def test_running_collects_both_sets_of_game_results
     @simulation.gather_one_pick_results
     @simulation.gather_two_pick_results
-    assert_equal 20, (@simulation.one_pick_results + @simulation.two_pick_results).length
+    assert_equal 10, (@simulation.one_pick_results + @simulation.two_pick_results).length
   end
 
   def test_one_pick_percentage_correct_returns_the_correct_ratio
