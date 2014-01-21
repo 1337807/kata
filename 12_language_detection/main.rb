@@ -14,6 +14,13 @@ class LanguageDetector
   def downcase_dictionaries!
     self.dictionaries.each { |_, dictionary| dictionary.map(&:downcase!) }
   end
+
+  def detect_language(phrase)
+    phrase.split.map do |word|
+      dictionaries = dictionaries_containing_word(word)
+      return [] if dictionaries.empty?
+    end
+  end
 end
 
 class LanguageDetectorTest < Test::Unit::TestCase
@@ -39,5 +46,9 @@ class LanguageDetectorTest < Test::Unit::TestCase
   def test_dictionaries_containing_word_ignores_case
     result = @detector.dictionaries_containing_word('KaJa')
     assert_equal ['English', 'German'], result
+  end
+
+  def test_detect_language_returns_empty_array_if_language_cannot_be_identified
+    assert_equal [], @detector.detect_language('all mimsy were the borogroves')
   end
 end
