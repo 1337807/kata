@@ -4,8 +4,10 @@ class LanguageDetector
   attr_accessor :dictionaries
 
   def dictionaries_containing_word(word)
+    downcase_dictionaries!
+
     self.dictionaries.map do |language, dictionary|
-      language if dictionary.include? word
+      language if dictionary.include? word.downcase
     end.compact
   end
 
@@ -20,7 +22,7 @@ class LanguageDetectorTest < Test::Unit::TestCase
     @detector.dictionaries = {
       'English'  => ['Jonan', 'Becky', 'Kaja'],
       'Japanese' => ['Jonan', 'Becky', 'Tavin'],
-      'German'   => ['Becky', 'Kaja', 'Tavin'],
+      'German'   => ['Becky', 'Kaja', 'Tavin']
     }
   end
 
@@ -32,5 +34,10 @@ class LanguageDetectorTest < Test::Unit::TestCase
   def test_downcase_dictionaries!
     @detector.downcase_dictionaries!
     assert_equal ['jonan', 'becky', 'kaja'], @detector.dictionaries['English']
+  end
+
+  def test_dictionaries_containing_word_ignores_case
+    result = @detector.dictionaries_containing_word('KaJa')
+    assert_equal ['English', 'German'], result
   end
 end
