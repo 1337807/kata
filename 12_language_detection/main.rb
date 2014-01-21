@@ -16,10 +16,21 @@ class LanguageDetector
   end
 
   def detect_language(phrase)
+    languages = []
+
     phrase.split.map do |word|
       dictionaries = dictionaries_containing_word(word)
+
       return [] if dictionaries.empty?
+
+      if languages.empty?
+        languages = dictionaries
+      else
+        languages = languages & dictionaries
+      end
     end
+
+    languages
   end
 end
 
@@ -50,5 +61,10 @@ class LanguageDetectorTest < Test::Unit::TestCase
 
   def test_detect_language_returns_empty_array_if_language_cannot_be_identified
     assert_equal [], @detector.detect_language('all mimsy were the borogroves')
+  end
+
+  def test_detect_language_returns_all_languages_matching_entire_phrase
+    expected = ['English', 'Japanese']
+    assert_equal expected, @detector.detect_language('Jonan Becky')
   end
 end
