@@ -18,6 +18,24 @@ class Reaction
   end
 end
 
+class ReactionTest < Test::Unit::TestCase
+  def setup
+    @reaction = Reaction.new
+  end
+
+  def test_grid_has_width_and_height_equal_to_reaction_size
+    @reaction.size = 5
+    expected = [
+      [nil, nil, nil, nil, nil],
+      [nil, nil, nil, nil, nil],
+      [nil, nil, nil, nil, nil],
+      [nil, nil, nil, nil, nil],
+      [nil, nil, nil, nil, nil]
+    ]
+    assert_equal expected, @reaction.grid
+  end
+end
+
 class Cell
   attr_accessor :name, :state
   PROPAGATED_OUTPUT = 'X'
@@ -56,20 +74,31 @@ class CellTest < Test::Unit::TestCase
   end
 end
 
-class ReactionTest < Test::Unit::TestCase
+class Vector
+  attr_accessor :direction
+  DIRECTION_ABBREVIATIONS = {
+    'u' => :up,
+    'd' => :down,
+    'r' => :right,
+    'l' => :left
+  }
+
+  def direction=(new_direction)
+    if full_name = DIRECTION_ABBREVIATIONS[new_direction]
+      @direction = full_name
+    else
+      @direction = new_direction
+    end
+  end
+end
+
+class VectorTest < Test::Unit::TestCase
   def setup
-    @reaction = Reaction.new
+    @vector = Vector.new
   end
 
-  def test_grid_has_width_and_height_equal_to_reaction_size
-    @reaction.size = 5
-    expected = [
-      [nil, nil, nil, nil, nil],
-      [nil, nil, nil, nil, nil],
-      [nil, nil, nil, nil, nil],
-      [nil, nil, nil, nil, nil],
-      [nil, nil, nil, nil, nil]
-    ]
-    assert_equal expected, @reaction.grid
+  def test_direction_can_be_set_with_a_single_character
+    @vector.direction = 'u'
+    assert_equal :up, @vector.direction
   end
 end
