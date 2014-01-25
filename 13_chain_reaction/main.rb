@@ -37,8 +37,12 @@ class ReactionTest < Test::Unit::TestCase
 end
 
 class Cell
-  attr_accessor :name, :state
+  attr_accessor :name, :state, :vectors
   PROPAGATED_OUTPUT = 'X'
+
+  def initialize
+    @vectors = []
+  end
 
   def out
     if propagated?
@@ -54,6 +58,12 @@ class Cell
 
   def propagate!
     self.state = :propagated
+  end
+
+  def parse_vectors(direction_abbreviations, magnitude)
+    direction_abbreviations.split(//).each do |direction_abbreviation|
+      self.vectors << Vector.new(direction_abbreviation, magnitude)
+    end
   end
 end
 
@@ -72,16 +82,27 @@ class CellTest < Test::Unit::TestCase
     @cell.propagate!
     assert_equal 'X', @cell.out
   end
+
+  def test_parse_vectors_creates_new_vectors_with_the_given_directions_and_magnitude
+    @cell.parse_vectors('ud', 5)
+    result = @cell.vectors.map { |vector| [vector.direction, vector.magnitude] }
+    assert_equal [[:up, 5], [:down, 5]], result
+  end
 end
 
 class Vector
-  attr_accessor :direction
+  attr_accessor :direction, :magnitude
   DIRECTION_ABBREVIATIONS = {
     'u' => :up,
     'd' => :down,
     'r' => :right,
     'l' => :left
   }
+
+  def initialize(direction = nil, magnitude = nil)
+    self.direction = direction
+    self.magnitude = magnitude
+  end
 
   def direction=(new_direction)
     if full_name = DIRECTION_ABBREVIATIONS[new_direction]
