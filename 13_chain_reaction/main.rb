@@ -19,10 +19,23 @@ class Reaction
 end
 
 class Cell
-  attr_accessor :name
+  attr_accessor :name, :state
+  PROPAGATED_OUTPUT = 'X'
 
   def out
-    self.name
+    if propagated?
+      PROPAGATED_OUTPUT
+    else
+      self.name
+    end
+  end
+
+  def propagated?
+    self.state == :propagated
+  end
+
+  def propagate!
+    self.state = :propagated
   end
 end
 
@@ -31,9 +44,15 @@ class CellTest < Test::Unit::TestCase
     @cell = Cell.new
   end
 
-  def test_out_prints_the_cells_name
+  def test_out_returns_the_cells_name
     @cell.name = 'A'
     assert_equal 'A', @cell.out
+  end
+
+  def test_out_returns_x_if_the_cell_has_propagated
+    @cell.name = 'A'
+    @cell.propagate!
+    assert_equal 'X', @cell.out
   end
 end
 
