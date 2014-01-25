@@ -100,12 +100,12 @@ class Vector
   }
 
   def initialize(direction = nil, magnitude = nil)
-    self.direction = direction
-    self.magnitude = magnitude
+    self.direction = direction if direction
+    self.magnitude = magnitude if magnitude
   end
 
   def direction=(new_direction)
-    if full_name = DIRECTION_ABBREVIATIONS[new_direction]
+    if full_name = DIRECTION_ABBREVIATIONS[new_direction.downcase]
       @direction = full_name
     else
       @direction = new_direction
@@ -121,5 +121,10 @@ class VectorTest < Test::Unit::TestCase
   def test_direction_can_be_set_with_a_single_character
     @vector.direction = 'u'
     assert_equal :up, @vector.direction
+  end
+
+  def test_direction_abbreviations_are_not_case_sensitive
+    @vector.direction = 'D'
+    assert_equal :down, @vector.direction
   end
 end
