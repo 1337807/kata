@@ -18,6 +18,25 @@ class Reaction
   end
 end
 
+class Cell
+  attr_accessor :name
+
+  def out
+    self.name
+  end
+end
+
+class CellTest < Test::Unit::TestCase
+  def setup
+    @cell = Cell.new
+  end
+
+  def test_out_prints_the_cells_name
+    @cell.name = 'A'
+    assert_equal 'A', @cell.out
+  end
+end
+
 class ReactionTest < Test::Unit::TestCase
   def setup
     @reaction = Reaction.new
