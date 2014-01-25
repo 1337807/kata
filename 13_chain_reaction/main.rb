@@ -5,7 +5,7 @@ class Reaction
 
   def initialize
     @size = 1
-    @grid = [[[]]]
+    resize_grid
   end
 
   def size=(new_size)
