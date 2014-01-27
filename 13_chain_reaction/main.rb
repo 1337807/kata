@@ -16,6 +16,12 @@ class Reaction
   def resize_grid
     self.grid = Array.new(self.size) { Array.new(self.size) }
   end
+
+  def parse_cell(coordinates_with_vectors)
+    x, y, magnitude, directions = coordinates_with_vectors.split
+    x, y, magnitude = x.to_i, y.to_i, magnitude.to_i
+    self.grid[y][x] = Cell.new(directions, magnitude)
+  end
 end
 
 class ReactionTest < Test::Unit::TestCase
@@ -34,14 +40,25 @@ class ReactionTest < Test::Unit::TestCase
     ]
     assert_equal expected, @reaction.grid
   end
+
+  def test_parse_cell_adds_a_cell_with_the_correct_vectors_to_the_grid
+    @reaction.size = 10
+    @reaction.parse_cell('3 7 5 lr')
+    cell = @reaction.grid[7][3]
+    result = cell.vectors.map { |vector| [vector.direction, vector.magnitude] }
+    assert_equal [[:left, 5], [:right, 5]], result
+  end
 end
 
 class Cell
   attr_accessor :name, :state, :vectors
   PROPAGATED_OUTPUT = 'X'
 
-  def initialize
+  def initialize(directions = nil, magnitude = nil)
     @vectors = []
+    if directions && magnitude
+      parse_vectors(directions, magnitude)
+    end
   end
 
   def out
