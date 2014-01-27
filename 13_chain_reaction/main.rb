@@ -22,6 +22,48 @@ class Reaction
     x, y, magnitude = x.to_i, y.to_i, magnitude.to_i
     self.grid[y][x] = Cell.new(directions, magnitude)
   end
+
+  def propagate_cell(x, y)
+    cell = grid[y][x]
+    cell.propagate!
+
+    cell.vectors.each do |vector|
+      propagate_cells_along_vector(x, y, vector)
+    end
+  end
+
+  def propagate_cells_along_vector(x, y, vector)
+    direction, magnitude = vector.direction, vector.magnitude
+    if direction == :up
+      magnitude.times do |distance_from_origin|
+        new_y = y - distance_from_origin
+        cell = self.grid[new_y][x]
+        next if new_y < 0 || cell.nil?
+        propagate_cell(x, new_y) unless cell.propagated?
+      end
+    elsif direction == :down
+      magnitude.times do |distance_from_origin|
+        new_y = y + distance_from_origin
+        cell = self.grid[new_y][x]
+        next if cell.nil?
+        propagate_cell(x, new_y) unless cell.propagated?
+      end
+    elsif direction == :left
+      magnitude.times do |distance_from_origin|
+        new_x = x - distance_from_origin
+        cell = self.grid[y][new_x]
+        next if new_x < 0 || cell.nil?
+        propagate_cell(new_x, y) unless cell.propagated?
+      end
+    elsif direction == :right
+      magnitude.times do |distance_from_origin|
+        new_x = x + distance_from_origin
+        cell = self.grid[y][new_x]
+        next if cell.nil?
+        propagate_cell(new_x, y) unless cell.propagated?
+      end
+    end
+  end
 end
 
 class ReactionTest < Test::Unit::TestCase
@@ -47,6 +89,20 @@ class ReactionTest < Test::Unit::TestCase
     cell = @reaction.grid[7][3]
     result = cell.vectors.map { |vector| [vector.direction, vector.magnitude] }
     assert_equal [[:left, 5], [:right, 5]], result
+  end
+
+  def test_propagate_cell_calls_propagate_on_all_cells_in_vector_paths
+    @reaction.size = 10
+    @reaction.parse_cell('5 5 5 udlr')
+    test_cell_propagated = false
+    test_cell = Cell.new
+    test_cell.singleton_class.send(:define_method,
+                                   :propagate!,
+                                   -> { test_cell_propagated = true })
+    @reaction.grid[5][6] = test_cell
+
+    @reaction.propagate_cell(5, 5)
+    assert test_cell_propagated
   end
 end
 
