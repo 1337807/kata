@@ -13,6 +13,14 @@ class Reaction
     resize_grid
   end
 
+  def get_cell(x, y)
+    self.grid[y][x]
+  end
+
+  def set_cell(x, y, cell)
+    self.grid[y][x] = cell
+  end
+
   def resize_grid
     self.grid = Array.new(self.size) { Array.new(self.size) }
   end
@@ -20,7 +28,7 @@ class Reaction
   def parse_cell(coordinates_with_vectors)
     x, y, magnitude, directions = coordinates_with_vectors.split
     x, y, magnitude = x.to_i, y.to_i, magnitude.to_i
-    self.grid[y][x] = Cell.new(directions, magnitude)
+    set_cell(x, y, Cell.new(directions, magnitude))
   end
 
   def propagate_cell(x, y)
@@ -37,28 +45,28 @@ class Reaction
     if direction == :up
       magnitude.times do |distance_from_origin|
         new_y = y - distance_from_origin
-        cell = self.grid[new_y][x]
+        cell = get_cell(x, new_y)
         next if new_y < 0 || cell.nil?
         propagate_cell(x, new_y) unless cell.propagated?
       end
     elsif direction == :down
       magnitude.times do |distance_from_origin|
         new_y = y + distance_from_origin
-        cell = self.grid[new_y][x]
+        cell = get_cell(x, new_y)
         next if cell.nil?
         propagate_cell(x, new_y) unless cell.propagated?
       end
     elsif direction == :left
       magnitude.times do |distance_from_origin|
         new_x = x - distance_from_origin
-        cell = self.grid[y][new_x]
+        cell = get_cell(new_x, y)
         next if new_x < 0 || cell.nil?
         propagate_cell(new_x, y) unless cell.propagated?
       end
     elsif direction == :right
       magnitude.times do |distance_from_origin|
         new_x = x + distance_from_origin
-        cell = self.grid[y][new_x]
+        cell = get_cell(new_x, y)
         next if cell.nil?
         propagate_cell(new_x, y) unless cell.propagated?
       end
