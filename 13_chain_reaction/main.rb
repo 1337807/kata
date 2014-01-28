@@ -57,6 +57,8 @@ class Reaction
     operation, magnitude = options[:operation], options[:magnitude]
 
     magnitude.times do |distance_from_origin|
+      # x should be y on the next line yet all tests pass
+      # write a test to fail this case
       changed = x.send(operation, distance_from_origin)
       cell = get_cell(changed, y)
       next if changed < 0 || cell.nil?
@@ -89,6 +91,11 @@ end
 class ReactionTest < Test::Unit::TestCase
   def setup
     @reaction = Reaction.new
+  end
+
+  def test_xs_and_ys_arent_interchangeable
+    # see line 60
+    assert false
   end
 
   def test_grid_has_width_and_height_equal_to_reaction_size
