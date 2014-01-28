@@ -42,33 +42,34 @@ class Reaction
 
   def propagate_cells_along_vector(x, y, vector)
     direction, magnitude = vector.direction, vector.magnitude
+
     if direction == :up
       magnitude.times do |distance_from_origin|
-        new_y = y - distance_from_origin
-        cell = get_cell(x, new_y)
-        next if new_y < 0 || cell.nil?
-        propagate_cell(x, new_y) unless cell.propagated?
+        changed = y - distance_from_origin
+        cell = get_cell(x, changed)
+        next if changed < 0 || cell.nil?
+        propagate_cell(x, changed) unless cell.propagated?
       end
     elsif direction == :down
       magnitude.times do |distance_from_origin|
-        new_y = y + distance_from_origin
-        cell = get_cell(x, new_y)
-        next if cell.nil?
-        propagate_cell(x, new_y) unless cell.propagated?
+        changed = y + distance_from_origin
+        cell = get_cell(x, changed)
+        next if changed < 0 || cell.nil?
+        propagate_cell(x, changed) unless cell.propagated?
       end
     elsif direction == :left
       magnitude.times do |distance_from_origin|
-        new_x = x - distance_from_origin
-        cell = get_cell(new_x, y)
-        next if new_x < 0 || cell.nil?
-        propagate_cell(new_x, y) unless cell.propagated?
+        changed = x - distance_from_origin
+        cell = get_cell(changed, y)
+        next if changed < 0 || cell.nil?
+        propagate_cell(changed, y) unless cell.propagated?
       end
     elsif direction == :right
       magnitude.times do |distance_from_origin|
-        new_x = x + distance_from_origin
-        cell = get_cell(new_x, y)
-        next if cell.nil?
-        propagate_cell(new_x, y) unless cell.propagated?
+        changed = x + distance_from_origin
+        cell = get_cell(changed, y)
+        next if changed < 0 || cell.nil?
+        propagate_cell(changed, y) unless cell.propagated?
       end
     end
   end
