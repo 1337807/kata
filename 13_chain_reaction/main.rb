@@ -40,23 +40,30 @@ class Reaction
     end
   end
 
+  def propagate_along_y_axis(options)
+    x, y = options[:x], options[:y]
+    operation, magnitude = options[:operation], options[:magnitude]
+
+    magnitude.times do |distance_from_origin|
+      changed = y.send(operation, distance_from_origin)
+      cell = get_cell(x, changed)
+      next if changed < 0 || cell.nil?
+      propagate_cell(x, changed) unless cell.propagated?
+    end
+  end
+
   def propagate_cells_along_vector(x, y, vector)
     direction, magnitude = vector.direction, vector.magnitude
 
+    options = Hash(:x => x, :y => y)
+    options[:direction], options[:magnitude] = vector.direction, vector.magnitude
+
     if direction == :up
-      magnitude.times do |distance_from_origin|
-        changed = y - distance_from_origin
-        cell = get_cell(x, changed)
-        next if changed < 0 || cell.nil?
-        propagate_cell(x, changed) unless cell.propagated?
-      end
+      options[:operation] = :-
+      propagate_along_y_axis(options)
     elsif direction == :down
-      magnitude.times do |distance_from_origin|
-        changed = y + distance_from_origin
-        cell = get_cell(x, changed)
-        next if changed < 0 || cell.nil?
-        propagate_cell(x, changed) unless cell.propagated?
-      end
+      options[:operation] = :+
+      propagate_along_y_axis(options)
     elsif direction == :left
       magnitude.times do |distance_from_origin|
         changed = x - distance_from_origin
