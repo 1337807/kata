@@ -1,5 +1,26 @@
 require 'test/unit'
 
+class Cli
+  def run
+    puts "Please enter number of students (N) and grades per student (M)\nN M:\n"
+  end
+end
+
+class CliTest < Test::Unit::TestCase
+  def setup
+    @cli = Cli.new
+  end
+
+  def test_run_prompts_users_for_number_of_students_and_number_of_grades
+    prompt = ''
+    @cli.singleton_class.send(:define_method, :puts, ->(phrase) { prompt = phrase })
+    @cli.run
+
+    expected = "Please enter number of students (N) and grades per student (M)\nN M:\n"
+    assert_equal expected, prompt
+  end
+end
+
 class Course
   attr_accessor :students
 
